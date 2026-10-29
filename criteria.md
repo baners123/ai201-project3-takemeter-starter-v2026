@@ -51,64 +51,60 @@ whether you hit them:
 
 ---
 
-## 1.
 
-<!-- Your criterion. It must name a number. -->
+Overall accuracy: 65%
+Macro F1: 0.60
+Minimum per-label F1: 0.50
+Human agreement: 75%
+Maximum class share: 50%
 
+# TakeMeter Acceptance Criteria
 
+These criteria were written before training results were viewed.
 
-**Why this target:**
+# Acceptance Criteria: TakeMeter
 
+These criteria were set before training results were viewed.
 
+## 1. Overall accuracy is at least 65%
 
----
-
-## 2.
-
-<!-- Your criterion. -->
-
-
-
-**Why this target:**
-
-
-
----
-
-## 3.
-
-<!-- Your criterion. -->
-
-
+On the held-out test set, TakeMeter should correctly classify at least 65% of posts.
 
 **Why this target:**
 
+There are three labels, so 65% would show that the classifier learned useful differences between supported takes, unsupported takes, and discussion prompts instead of relying on simple guessing.
 
+## 2. Macro F1 is at least 0.60
 
----
-
-## 4.
-
-<!-- Your criterion. -->
-
-
+TakeMeter should achieve a macro F1 score of at least 0.60 on the held-out test set.
 
 **Why this target:**
 
+The dataset contains three labels with different counts. Macro F1 gives each label equal importance, so a score of at least 0.60 would show that performance is not coming from only predicting the most common NBA discussion type.
 
+## 3. Every label has an F1 score of at least 0.50
 
----
-
-## 5.
-
-<!-- Your criterion. -->
-
-
+The F1 score for `supported_take`, `unsupported_take`, and `discussion_prompt` should each be at least 0.50 on the held-out test set.
 
 **Why this target:**
 
+The three labels represent different types of posts in r/NBATalk. `supported_take` is the smallest class with 55 examples, so I expect it to be harder to learn than the larger classes. I still want every label to reach at least 0.50 F1.
 
+## 4. Human label agreement is at least 75%
 
+When the same held-out posts are independently labeled by another person using the written taxonomy, at least 75% of their labels should match my labels.
+
+**Why this target:**
+
+The hardest distinction in this dataset is between `supported_take` and `unsupported_take`. A 75% agreement rate would show that the definitions and decision rule are clear enough for another person to apply without needing my interpretation.
+
+## 5. No label represents more than 50% of the dataset
+
+Before training, no single label should account for more than 50% of the 200 labeled examples.
+
+**Why this target:**
+
+A dominant label could let the classifier perform well by repeatedly predicting the same class. The NBA dataset should contain enough supported takes, unsupported takes, and discussion prompts for the model to learn all three categories.
 ---
 
 <!-- ─────────────────────────────────────────────────────────────────────────
