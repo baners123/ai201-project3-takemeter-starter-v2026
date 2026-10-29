@@ -152,33 +152,33 @@ The confidence check from the same run also shows that confidence had some usefu
 
 ## Baseline vs. Trained
 
-**Prediction written before looking at the baseline:** I expect the fine-tuned model to have its largest advantage on the `supported_take` versus `unsupported_take` boundary because it trained on r/NBATalk examples that use community-specific basketball language and evidence.
+**Prediction written before looking at the baseline:** I expected the fine-tuned model to have its largest advantage on the `supported_take` versus `unsupported_take` boundary because it trained on r/NBATalk examples that use community-specific basketball language and evidence.
 
 | Measure | Baseline | Trained | Difference |
 |---|---:|---:|---:|
-| Overall accuracy | PENDING | 0.567 | PENDING |
-| Macro F1 | PENDING | 0.488 | PENDING |
-| F1, `supported_take` | PENDING | 0.588 | PENDING |
-| F1, `unsupported_take` | PENDING | 0.167 | PENDING |
-| F1, `discussion_prompt` | PENDING | 0.710 | PENDING |
+| Overall accuracy | 0.300 | 0.567 | +0.267 |
+| Macro F1 | 0.224 | 0.488 | +0.264 |
+| F1, `discussion_prompt` | 0.000 | 0.710 | +0.710 |
+| F1, `supported_take` | 0.438 | 0.588 | +0.151 |
+| F1, `unsupported_take` | 0.235 | 0.167 | -0.069 |
 
-**What the gap actually means:** PENDING AFTER BASELINE RUN.
+The fine-tuned model clearly beat the zero-shot baseline overall. Accuracy improved by 0.267 and macro F1 improved by 0.264 on the same 30 held-out posts. The largest gain was on `discussion_prompt`, which improved from 0.000 F1 to 0.710. Fine-tuning also improved `supported_take` from 0.438 to 0.588. The one regression was `unsupported_take`, which fell from 0.235 to 0.167. That result suggests the fine-tuned model learned the prompt and supported-take patterns better than the unsupported-take boundary.
 
 ## Run Log: Before
 
-**Device:** `mps`
+**Device:** `mps` on Apple Silicon
 
 | Criterion | Target | Seed 42 | Seed 7 | Seed 2024 | Verdict |
 |---|---:|---:|---:|---:|---|
-| 1. Overall accuracy | >= 0.65 | 0.567 | PENDING | PENDING | PENDING |
-| 2. Macro F1 | >= 0.60 | 0.488 | PENDING | PENDING | PENDING |
-| 3. `supported_take` F1 | >= 0.50 | 0.588 | PENDING | PENDING | PENDING |
-| 4. `unsupported_take` F1 | >= 0.50 | 0.167 | PENDING | PENDING | PENDING |
-| 5. `discussion_prompt` F1 | >= 0.50 | 0.710 | PENDING | PENDING | PENDING |
+| 1. Overall accuracy | >= 0.65 | 0.567 | 0.567 | 0.600 | MISSED |
+| 2. Macro F1 | >= 0.60 | 0.488 | 0.442 | 0.583 | MISSED |
+| 3. `supported_take` F1 | >= 0.50 | 0.588 | 0.000 | 0.706 | MISSED |
+| 4. `unsupported_take` F1 | >= 0.50 | 0.167 | 0.625 | 0.375 | MISSED |
+| 5. `discussion_prompt` F1 | >= 0.50 | 0.710 | 0.700 | 0.667 | MET |
 
 ### Confusion matrix
 
-Rows are true labels and columns are predictions.
+The required typed matrix below is from seed 42, the same seed used for the original Unit 5 run.
 
 | true \ predicted | `supported_take` | `unsupported_take` | `discussion_prompt` |
 |---|---:|---:|---:|
@@ -186,21 +186,55 @@ Rows are true labels and columns are predictions.
 | **`unsupported_take`** | 4 | 1 | 6 |
 | **`discussion_prompt`** | 0 | 0 | 11 |
 
-**My biggest off-diagonal number, and what it means:** In the seed 42 run, 6 true `unsupported_take` posts were predicted as `discussion_prompt`. This is the largest confusion so far and suggests that the model often interprets unsupported opinions as posts whose main purpose is starting a discussion. This matrix will be updated after the full three-seed Unit 6 run.
+The biggest off-diagonal count in seed 42 is 6 true `unsupported_take` posts predicted as `discussion_prompt`. The other major miss is 4 unsupported takes predicted as supported takes. This shows that `unsupported_take` sits between the other two labels and is the least stable boundary.
+
+The same pattern changes direction across seeds. In seed 7, all 8 true `supported_take` posts were missed, with 7 predicted as `unsupported_take`. In seed 2024, 7 of 11 true `unsupported_take` posts were predicted as `discussion_prompt`. The overall accuracy changed only from 0.567 to 0.600, but the per-label behavior changed much more. That means the model is fairly stable in total accuracy while still being unstable about which side of the label boundary individual posts belong on.
 
 ## Verdicts and Diagnoses
 
-| # | Criterion | Target | Verdict | How I decided |
-|---|---|---:|---|---|
-| 1 | Overall accuracy | >= 0.65 | PENDING | Compare all three seed accuracies with 0.65. A single seed below the target means MISSED. |
-| 2 | Macro F1 | >= 0.60 | PENDING | Compare all three macro F1 values with 0.60. |
-| 3 | `supported_take` F1 | >= 0.50 | PENDING | Compare the label F1 across all three seeds with 0.50. |
-| 4 | `unsupported_take` F1 | >= 0.50 | PENDING | Compare the label F1 across all three seeds with 0.50. |
-| 5 | `discussion_prompt` F1 | >= 0.50 | PENDING | Compare the label F1 across all three seeds with 0.50. |
+### Criterion 1: Overall accuracy >= 0.65
 
-### Diagnoses
+**Verdict: MISSED**
 
-PENDING. For every MISSED criterion, connect the miss to evidence from the three-seed results, confusion matrix, and agreement report.
+The three accuracies were 0.567, 0.567, and 0.600. All three were below 0.65, so the target was missed.
+
+**Diagnosis:** The model is consistently below the target rather than failing because of one unlucky split. The spread is only 0.033, which suggests the overall task is difficult for this dataset size and taxonomy. The lower macro F1 values show that the model's errors are concentrated in specific labels rather than being evenly distributed.
+
+### Criterion 2: Macro F1 >= 0.60
+
+**Verdict: MISSED**
+
+The macro F1 values were 0.488, 0.442, and 0.583. All three were below 0.60.
+
+**Diagnosis:** Macro F1 is being pulled down by label instability. `discussion_prompt` stays strong across all three seeds, but `supported_take` falls to 0.000 on seed 7 and `unsupported_take` falls below 0.50 on seeds 42 and 2024. The model is therefore not learning all three labels equally well.
+
+### Criterion 3: `supported_take` F1 >= 0.50
+
+**Verdict: MISSED**
+
+The F1 values were 0.588, 0.000, and 0.706. Seed 7 missed the target completely.
+
+**Diagnosis:** This label is highly split-sensitive. In seed 7, all 8 true `supported_take` posts were misclassified. Seven were called `unsupported_take` and one was called `discussion_prompt`. Because the same label performs well on seeds 42 and 2024, the problem looks less like the model being unable to learn `supported_take` at all and more like an unstable boundary between supported and unsupported claims. `supported_take` is also the smallest class in the dataset at 55 examples, so its training examples change more noticeably when the random split changes.
+
+### Criterion 4: `unsupported_take` F1 >= 0.50
+
+**Verdict: MISSED**
+
+The F1 values were 0.167, 0.625, and 0.375. Seeds 42 and 2024 both missed the target.
+
+**Diagnosis:** `unsupported_take` is the clearest weak boundary. In seed 42, only 1 of 11 unsupported takes was classified correctly. Six were called `discussion_prompt` and four were called `supported_take`. In seed 2024, 7 of 11 were called `discussion_prompt`. The baseline also scored 0.235 F1 on this label, while the trained model scored 0.167 in the original seed 42 run. This suggests the label is difficult to separate consistently and that the training data likely contains borderline posts where a question, opinion, or small amount of evidence changes the interpretation.
+
+### Criterion 5: `discussion_prompt` F1 >= 0.50
+
+**Verdict: MET**
+
+The F1 values were 0.710, 0.700, and 0.667. All three exceeded 0.50.
+
+**Diagnosis:** This is the most stable label. Its F1 stayed above 0.66 across every split. The model learned question and community-response language more consistently than it learned the difference between supported and unsupported claims.
+
+### Overall diagnosis before the agreement check
+
+The strongest current evidence points to a label-boundary problem rather than a simple model-capacity problem. Total accuracy is fairly stable across seeds, but `supported_take` and `unsupported_take` trade errors depending on which examples land in the training set. The staff agreement check is the next piece of evidence needed to decide whether the required improvement should relabel one boundary or change something else.
 
 ## Agreement Report
 
