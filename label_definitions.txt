@@ -1,10 +1,15 @@
-# Your label definitions, one per line, as `label: definition`.
-#
-# Copy these from your README so the baseline is judged on exactly the
-# definitions you wrote. baseline.py reads this file.
-#
-# Delete the examples below and put yours in.
+supported_take: A post that makes a basketball claim and supports it with a specific checkable fact, statistic, historical example, or explained basketball reasoning.
 
-analysis: makes an argument backed by a specific, checkable fact
-hot_take: a confident claim with no support offered
-reaction: an immediate response to something that just happened
+unsupported_take: A post that makes a basketball judgment, ranking, prediction, or confident claim without enough supporting evidence or reasoning to establish an argument.
+
+discussion_prompt: A post that primarily asks the community to choose, rank, predict, compare, or give an opinion instead of presenting its own developed argument.
+
+DECISION RULE:
+
+If a post gives specific evidence or explains a basketball mechanism that directly supports its main claim, label it supported_take.
+
+If it mainly states a ranking, prediction, judgment, or conclusion without developing why, label it unsupported_take.
+
+A statistic, number, or player name by itself does not automatically make a post supported. The information must be used to support the main claim.
+
+If a post asks a question but also gives an argument, determine its main purpose. If most of the post develops the writer's own claim, use supported_take or unsupported_take. If its main purpose is getting answers from other users, use discussion_prompt.
