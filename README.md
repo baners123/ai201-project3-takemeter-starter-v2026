@@ -238,45 +238,55 @@ The strongest current evidence points to a label-boundary problem rather than a 
 
 ## Agreement Report
 
-**Agreement rate:** PENDING / 30 = PENDING%
+The official comparison could not be completed yet because `data/staff_labels.csv` was not available in the repository. The assignment specifies that this file must come from the TF after my own 30 labels are saved.
 
-### Disagreements
+My first attempt at `my_staff_labels.csv` is not valid for agreement scoring because I accidentally entered arbitrary short values instead of the three required staff taxonomy labels. I will replace those entries using only `analysis`, `hot_take`, and `reaction` before running `agreement.py`.
 
-PENDING AFTER `python agreement.py`.
-
-For every disagreement, record:
-
-1. **The post:** exact text
-2. **Staff said / I said:** both labels
-3. **My call, and why:** which interpretation is stronger under `data/staff_taxonomy.md`
-4. **Which pile:** rule covered it but I applied it loosely; rule does not say; or rule is ambiguous and my reading is defensible
-
-**What the pattern in my disagreements tells me:** PENDING.
+I did not create or invent a staff answer key or agreement rate.
 
 ## The Improvement
 
-**What I changed:** PENDING UNTIL THE DIAGNOSIS IDENTIFIES ONE FAILURE.
+**What I changed:** I increased training from 3 epochs to 5 epochs. I kept the dataset, base model, learning rate, batch size, maximum sequence length, and the same three random seeds unchanged.
 
-**Which diagnosis pointed at it:** PENDING.
-
-Only one change should be made for the required improvement. Use the same three seeds afterward.
+**Why I changed it:** The validation metrics were still improving at the end of the original 3-epoch runs. For seed 42, validation macro F1 increased from about 0.383 at epoch 1 to about 0.461 at epoch 3. For seed 7, it increased from about 0.186 to about 0.481. That suggested the model might still be learning when the original run stopped.
 
 ### Run Log: After
 
 | Criterion | Target | Seed 42 | Seed 7 | Seed 2024 | Verdict |
 |---|---:|---:|---:|---:|---|
-| 1. Overall accuracy | >= 0.65 | 0.567 | PENDING | PENDING | PENDING |
-| 2. Macro F1 | >= 0.60 | 0.488 | PENDING | PENDING | PENDING |
-| 3. `supported_take` F1 | >= 0.50 | 0.588 | PENDING | PENDING | PENDING |
-| 4. `unsupported_take` F1 | >= 0.50 | 0.167 | PENDING | PENDING | PENDING |
-| 5. `discussion_prompt` F1 | >= 0.50 | 0.710 | PENDING | PENDING | PENDING |
+| 1. Overall accuracy | >= 0.65 | 0.600 | 0.633 | 0.800 | MISSED |
+| 2. Macro F1 | >= 0.60 | 0.568 | 0.615 | 0.798 | MISSED |
+| 3. `supported_take` F1 | >= 0.50 | 0.588 | 0.545 | 0.800 | MET |
+| 4. `unsupported_take` F1 | >= 0.50 | 0.400 | 0.609 | 0.762 | MISSED |
+| 5. `discussion_prompt` F1 | >= 0.50 | 0.714 | 0.692 | 0.833 | MET |
 
-**Did it help, and how do I know:** PENDING. Compare the before and after runs across the same three seeds. A change that makes performance worse is still a valid measured result if reported accurately.
+### Did the change help?
+
+Yes. The five-epoch run improved the model overall.
+
+Average accuracy across the three seeds increased from about **0.578** before to **0.678** after. Average macro F1 increased from about **0.504** to **0.660**.
+
+The per-label averages also improved:
+
+| Label | Before average F1 | After average F1 | Change |
+|---|---:|---:|---:|
+| `supported_take` | 0.431 | 0.645 | +0.214 |
+| `unsupported_take` | 0.389 | 0.590 | +0.201 |
+| `discussion_prompt` | 0.692 | 0.747 | +0.055 |
+
+The change was especially useful for the two unstable argument labels. `supported_take` moved from failing one seed completely at 0.000 to clearing 0.50 on all three seeds. `unsupported_take` improved substantially, although seed 42 still remained below the 0.50 target at 0.400.
+
+The change did not make every criterion pass, but it made the model more stable and improved both overall performance and the weakest label boundary.
 
 ## What's Still Broken
 
-PENDING AFTER THE IMPROVEMENT RUN.
+Three criteria still miss their targets after the improvement.
 
-For every criterion still missed, state what you would try next and why you stopped.
+**Overall accuracy:** Seed 42 reached 0.600 and seed 7 reached 0.633, both below the 0.65 target. The average improved, but the criterion requires the target to hold across all three seeds.
 
-**The gap between what I meant my labels to capture and what the model learned:** PENDING. Use the confusion matrix as evidence.
+**Macro F1:** Seed 42 reached 0.568, below the 0.60 target. Seeds 7 and 2024 passed. I would next focus on the remaining boundary errors rather than simply training longer again.
+
+**`unsupported_take` F1:** Seed 42 reached 0.400, while seeds 7 and 2024 reached 0.609 and 0.762. This label remains the least stable one. The confusion matrices show that unsupported takes are often pulled toward either `supported_take` or `discussion_prompt`, depending on the split.
+
+The gap between what I meant the taxonomy to capture and what the model learned is clearest around `unsupported_take`. I intended it to represent a confident basketball claim that lacks enough support to become an argument. The model often learned surface cues instead. Posts phrased as questions could be pulled toward `discussion_prompt`, while longer opinionated posts could be pulled toward `supported_take` even when their evidence was weak. Five epochs helped the model learn the distinction more consistently, but the boundary is still not fully stable.
+
