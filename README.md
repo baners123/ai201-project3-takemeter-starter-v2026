@@ -1,396 +1,225 @@
-# TakeMeter
-
-> ### 👋 Start here
->
-> **New to this repo? Read [RUNNING.md](RUNNING.md) first** — setup, the
-> notebook, the baseline, and what to do when something breaks.
->
-> Once `python test.py` passes:
->
-> ```bash
-> head -5 data/practice_labels.csv     # the shape your labels.csv needs
-> ```
->
-> Then open `takemeter.ipynb` **in this folder** — in VS Code, or with
-> `jupyter notebook` if you prefer. Pick the kernel: the `.venv` inside this
-> project. Run section 1, which reports the hardware you'll be training on.
-> Everything else waits until you have data.
->
-> Nothing to upload, nothing to connect, no accounts and no keys. The notebook
-> runs on your machine and writes next to your code.
->
-> **The rest of this file is your submission.** Fill it in as you go.
-
----
-
-<!-- ─────────────────────────────────────────────────────────────────────────
-     HOW TO USE THIS FILE
-
-     Unit 5 asks for the first five sections. Unit 6 adds the five below them.
-
-     Everything is pasted as TEXT. No screenshots, no images.
-
-     ⚠️ The confusion matrix especially. The notebook prints one as a markdown
-     table, ready to copy. A screenshot of a matrix earns nothing. Paste the
-     table.
-     ───────────────────────────────────────────────────────────────────────── -->
-
-<!-- ═══════════════════════ UNIT 5 — THE BUILD ═══════════════════════ -->
+# TakeMeter: NBA Discussion Classifier
 
 ## What This Does
 
-<!-- Your community, and what your classifier sorts posts into. Three or four
-     sentences. -->
-
-
-
----
+TakeMeter classifies public r/NBATalk posts by how the writer presents an NBA take. It separates evidence-backed basketball arguments, unsupported opinions, and posts whose main purpose is asking the community for input.
 
 ## Label Taxonomy
 
-<!-- Each label: a one-sentence definition and two real examples from your
-     reading. Then your decision rule for the hardest boundary.
+### `supported_take`
 
-     The decision rule is worth a point on its own and it's the thing most
-     people leave out. Every taxonomy has a hardest boundary. Name yours. -->
+Makes a basketball claim and supports it with a specific checkable fact, statistic, historical example, or explained basketball reasoning.
 
-### `label_one`
+Example 1:
 
-**Definition:**
+> The Pistons' offense stalled after the first quarter against New York. The post cites 12 points in the second quarter, 13 in the third, and 9-for-37 three-point shooting before asking whether the problem was shooting or New York's defense.
 
-**Example 1:**
->
+Example 2:
 
-**Example 2:**
->
+> SGA is 47th in the league this season in free throw attempts. 18 total attempts on the season, while Jayson Tatum attempted 22 in one game.
 
-### `label_two`
+### `unsupported_take`
 
-**Definition:**
+Makes a basketball judgment, ranking, prediction, or confident claim without enough supporting evidence or reasoning to establish an argument.
 
-**Example 1:**
->
+Example 1:
 
-**Example 2:**
->
+> Lukewarm Take: Kobe Bryant's 81PTS game is more impressive than Bam Adebayo's 83PTS game.
+
+Example 2:
+
+> Yaxel is better than Maxey.
+
+### `discussion_prompt`
+
+Primarily asks the community to choose, rank, predict, compare, explain, or give an opinion rather than making its own developed argument.
+
+Example 1:
+
+> Where would you rank Reaves as a player in the NBA?
+
+Example 2:
+
+> Who is the greatest in-game dunker?
 
 ### The hardest boundary
 
-**Which two labels:**
+**Which two labels:** `supported_take` and `unsupported_take`
 
-**The decision rule I used every time:**
-<!-- e.g. "If the post names a specific checkable fact, it's `analysis`, even
-     if the tone is heated." -->
-
-
-
----
+**Decision rule:** If a post gives specific evidence or explains a basketball mechanism that directly supports its main claim, label it `supported_take`. If it mainly states a ranking, prediction, judgment, or conclusion without developing why, label it `unsupported_take`. A number or player name by itself does not automatically make a post supported. If the primary purpose is asking other users for a judgment, label it `discussion_prompt`.
 
 ## The Dataset
 
-<!-- Where you collected from, how you labelled, your counts, and three hard
-     cases. -->
+**Where the posts came from:** Public posts from r/NBATalk.
 
-**Where the posts came from:**
-
-**How I labelled them:** <!-- Cold first? Pre-labelled with AI and corrected?
-Say so plainly — the disclosure is required, not penalised. -->
+**How I labelled them:** I used the written taxonomy above to assign one of three labels to each post. The first 20 rows are marked `cold`. Rows 21 through 200 were AI pre-labelled against the same definitions and marked for manual review. Before submission, I reviewed the AI suggestions against the written decision rule and corrected any labels I disagreed with.
 
 **Counts per label:**
 
 | Label | Count | Share |
-|---|---|---|
-|  |  |  |
-|  |  |  |
-|  |  |  |
-| **Total** |  | 100% |
+|---|---:|---:|
+| `unsupported_take` | 75 | 37.5% |
+| `discussion_prompt` | 70 | 35.0% |
+| `supported_take` | 55 | 27.5% |
+| **Total** | **200** | **100%** |
 
-**Three hard cases**
+No label represents more than 70% of the dataset.
 
-<!-- Any post that made you pause: what it was, which two labels it could have
-     been, and what you chose. These are worth more than the easy 190. -->
+### Three hard cases
 
-**1.**
-> *The post:*
->
-> *Could have been:*
->
-> *I chose, because:*
+1. **Why do NBA fans not like winners anymore?**
 
-**2.**
-> *The post:*
->
-> *Could have been:*
->
-> *I chose, because:*
+   **Could have been:** `discussion_prompt` or `supported_take`
 
-**3.**
-> *The post:*
->
-> *Could have been:*
->
-> *I chose, because:*
+   **I chose:** `discussion_prompt`
 
----
+   **Because:** The writer gives some reasoning, but the main purpose is asking the community to explain a trend.
+
+2. **If Giannis wins a ring with the Heat would he move above LeBron on the all time list?**
+
+   **Could have been:** `discussion_prompt` or `unsupported_take`
+
+   **I chose:** `discussion_prompt`
+
+   **Because:** The writer gives a personal ranking, but the main purpose is asking other users how Giannis should be ranked.
+
+3. **Am I supposed to feel bad for OKC?**
+
+   **Could have been:** `discussion_prompt` or `supported_take`
+
+   **I chose:** `supported_take`
+
+   **Because:** The opening question is rhetorical. The body argues a position and gives examples involving Lu Dort to support it.
 
 ## The Training Run
 
-<!-- Your starting model, your settings, and anything you changed and why. -->
+**Base model:** `distilbert-base-uncased`
 
-**Base model:**
+**Device:** `mps` on Apple Silicon
 
-**Settings:** <!-- epochs, learning rate, batch size, seed -->
+**Settings:**
 
-**Anything I changed from the defaults, and why:**
+- Epochs: 3
+- Learning rate: 2e-5
+- Batch size: 16
+- Maximum sequence length: 128 tokens
+- Initial seed: 42
 
-**Split sizes:** <!-- train / val / test, and per-label counts in the test
-split. If a label had fewer than about 8 in test, say so — it explains a lot
-of next unit's variance. -->
+**Anything I changed from the defaults, and why:** Nothing for the Unit 5 training run. I kept the starter settings so the first result would be a clean reference point.
 
-
-
----
+**Split sizes:** 140 training, 30 validation, 30 test, using the notebook's stratified 70/15/15 split.
 
 ## How I Used AI
 
-<!-- Two specific moments — what you asked, what came back, what you changed.
+### Moment 1
 
-     ⚠️ Plus disclosure of any pre-labelling. If you had a model pre-label a
-     batch and then read and corrected every one, say that. It's an allowed
-     workflow and disclosing it costs you nothing. Not disclosing it is the
-     problem. -->
+- **What I asked for:** I used AI to stress-test the boundary between a supported basketball argument, an unsupported take, and a discussion prompt.
+- **What came back:** The difficult cases were mostly posts that contained a question but also stated an opinion, or posts that mentioned a statistic without using it to support the main claim.
+- **What I changed:** I kept a written decision rule that classifies the primary purpose of the post and requires evidence to directly support the claim before using `supported_take`.
 
-**Moment 1**
+### Moment 2
 
-- *What I asked for:*
-- *What came back:*
-- *What I changed:*
+- **What I asked for:** I used AI to pre-label rows after the initial cold-labeling set and to check the dataset for missing labels, duplicate text, and class imbalance.
+- **What came back:** The final dataset contains 200 rows, no blank labels, no exact duplicate text, and no class above 37.5%.
+- **What I changed:** I reviewed the suggestions against my taxonomy and corrected cases where the post's purpose mattered more than the presence of a question mark or a statistic.
 
-**Moment 2**
-
-- *What I asked for:*
-- *What came back:*
-- *What I changed:*
-
-**Pre-labelling disclosure:**
-
-<!-- ═══════════════════════ UNIT 6 — THE TEST ═══════════════════════
-
-     Don't fill these in during unit 5.
-     ═══════════════════════════════════════════════════════════════════ -->
+**Pre-labelling disclosure:** AI was used to suggest labels for rows 21 through 200. Those rows are identified in the `note` column. I reviewed the suggestions against the written taxonomy before training.
 
 ---
 
 ## Baseline vs. Trained
 
-<!-- Both models on the same posts. `python baseline.py --trained results.json`
-     prints this table for you. -->
+**Prediction written before looking at the baseline:** I expect the fine-tuned model to have its largest advantage on the `supported_take` versus `unsupported_take` boundary because it trained on r/NBATalk examples that use community-specific basketball language and evidence.
 
 | Measure | Baseline | Trained | Difference |
-|---|---|---|---|
-| Overall accuracy |  |  |  |
-| Macro F1 |  |  |  |
-| F1 — `label_one` |  |  |  |
-| F1 — `label_two` |  |  |  |
+|---|---:|---:|---:|
+| Overall accuracy | PENDING | PENDING | PENDING |
+| Macro F1 | PENDING | PENDING | PENDING |
+| F1, `supported_take` | PENDING | PENDING | PENDING |
+| F1, `unsupported_take` | PENDING | PENDING | PENDING |
+| F1, `discussion_prompt` | PENDING | PENDING | PENDING |
 
-**What I predicted before I looked:**
-<!-- Milestone 1 asks you to write this BEFORE seeing the trained numbers. A
-     prediction made afterwards isn't one. -->
+**What the gap actually means:** PENDING AFTER BASELINE RUN.
 
-**What the gap actually means:**
-<!-- If the baseline matched your trained model, your fine-tuning added
-     nothing — and that is a real finding, not a failure. Say it plainly. -->
+## Run Log: Before
 
-
-
----
-
-## Run Log — Before
-
-<!-- Five criteria across three seeds. The notebook's section 6 prints the
-     spread table; the Target and Verdict columns are yours. -->
+**Device:** `mps`
 
 | Criterion | Target | Seed 42 | Seed 7 | Seed 2024 | Verdict |
-|---|---|---|---|---|---|
-| 1.  |  |  |  |  |  |
-| 2.  |  |  |  |  |  |
-| 3.  |  |  |  |  |  |
-| 4.  |  |  |  |  |  |
-| 5.  |  |  |  |  |  |
+|---|---:|---:|---:|---:|---|
+| 1. Overall accuracy | >= 0.65 | PENDING | PENDING | PENDING | PENDING |
+| 2. Macro F1 | >= 0.60 | PENDING | PENDING | PENDING | PENDING |
+| 3. `supported_take` F1 | >= 0.50 | PENDING | PENDING | PENDING | PENDING |
+| 4. `unsupported_take` F1 | >= 0.50 | PENDING | PENDING | PENDING | PENDING |
+| 5. `discussion_prompt` F1 | >= 0.50 | PENDING | PENDING | PENDING | PENDING |
 
 ### Confusion matrix
 
-<!-- ⚠️ TYPED AS A MARKDOWN TABLE. The notebook prints one ready to paste.
-     An image of a matrix earns nothing. -->
+Rows are true labels and columns are predictions.
 
-| true \ predicted |  |  |  |
-|---|---|---|---|
-| **** |  |  |  |
-| **** |  |  |  |
-| **** |  |  |  |
+| true \ predicted | `supported_take` | `unsupported_take` | `discussion_prompt` |
+|---|---:|---:|---:|
+| **`supported_take`** | PENDING | PENDING | PENDING |
+| **`unsupported_take`** | PENDING | PENDING | PENDING |
+| **`discussion_prompt`** | PENDING | PENDING | PENDING |
 
-**My biggest off-diagonal number, and what it means:**
-<!-- Not "the model made mistakes" — WHICH boundary it didn't learn, and which
-     direction. "7 real analysis posts were called hot_take and only 3 went the
-     other way" is a direction, not just an error rate. -->
-
-
-
----
+**My biggest off-diagonal number, and what it means:** PENDING AFTER SECTION 7.
 
 ## Verdicts and Diagnoses
 
-<!-- MET or MISSED against LAST UNIT's target. The target has to hold across
-     all three seeds, not turn up sometimes. -->
-
 | # | Criterion | Target | Verdict | How I decided |
-|---|---|---|---|---|
-| 1 |  |  |  |  |
-| 2 |  |  |  |  |
-| 3 |  |  |  |  |
-| 4 |  |  |  |  |
-| 5 |  |  |  |  |
+|---|---|---:|---|---|
+| 1 | Overall accuracy | >= 0.65 | PENDING | Compare all three seed accuracies with 0.65. A single seed below the target means MISSED. |
+| 2 | Macro F1 | >= 0.60 | PENDING | Compare all three macro F1 values with 0.60. |
+| 3 | `supported_take` F1 | >= 0.50 | PENDING | Compare the label F1 across all three seeds with 0.50. |
+| 4 | `unsupported_take` F1 | >= 0.50 | PENDING | Compare the label F1 across all three seeds with 0.50. |
+| 5 | `discussion_prompt` F1 | >= 0.50 | PENDING | Compare the label F1 across all three seeds with 0.50. |
 
-**Diagnoses**
+### Diagnoses
 
-<!-- For each miss: the cause, and how you know. The four common causes are:
-     too few examples for a label, a boundary you applied inconsistently, a
-     genuinely hard label pair, and a task the model can't reach from this
-     much data.
-
-     ⚠️ Use your agreement report as evidence. It is the only instrument you
-     have that can tell a LABELLING problem from a MODEL problem, and this
-     section is graded on whether you used it that way. -->
-
-
-
----
+PENDING. For every MISSED criterion, connect the miss to evidence from the three-seed results, confusion matrix, and agreement report.
 
 ## Agreement Report
 
-<!-- Your rate against the staff set, and every disagreement adjudicated.
+**Agreement rate:** PENDING / 30 = PENDING%
 
-     Remember you labelled these 30 under the STAFF taxonomy in
-     data/staff_taxonomy.md, not your own — so every argument below is made
-     from those definitions and those decision rules. -->
+### Disagreements
 
-**Agreement rate:** ___ / 30 = ___%
+PENDING AFTER `python agreement.py`.
 
-<!-- Nobody grades this number. A 60% who argues every disagreement from the
-     stated rules beats a 95% who wrote "staff was right" nine times. Several
-     of the 30 were chosen because they're genuinely ambiguous — you should be
-     winning some of these. -->
+For every disagreement, record:
 
-**Disagreements**
+1. **The post:** exact text
+2. **Staff said / I said:** both labels
+3. **My call, and why:** which interpretation is stronger under `data/staff_taxonomy.md`
+4. **Which pile:** rule covered it but I applied it loosely; rule does not say; or rule is ambiguous and my reading is defensible
 
-<!-- Three lines each: the post, both labels, and who you think is right and
-     why — grounded in the staff definitions you were both applying.
-
-     Then sort each into one of three piles:
-       (a) the rule covered it and I applied it loosely → a consistency problem
-       (b) the rule genuinely doesn't say               → a gap in the definitions
-       (c) the rule is ambiguous here and my reading is defensible → argue it.
-           This is a legitimate win.
-
-     Pile (a) is the one that matters most for your diagnosis: if you applied a
-     written rule two different ways on 30 posts, that is direct evidence about
-     what you did across your own 200. -->
-
-**1.**
-> *The post:*
->
-> *Staff said / I said:*
->
-> *My call, and why:*
->
-> *Which pile:*
-
-**2.**
-> *The post:*
->
-> *Staff said / I said:*
->
-> *My call, and why:*
->
-> *Which pile:*
-
-**What the pattern in my disagreements tells me:**
-
-
-
----
+**What the pattern in my disagreements tells me:** PENDING.
 
 ## The Improvement
 
-**What I changed:**
+**What I changed:** PENDING UNTIL THE DIAGNOSIS IDENTIFIES ONE FAILURE.
 
-**Which diagnosis pointed at it:**
+**Which diagnosis pointed at it:** PENDING.
 
-### Run Log — After
+Only one change should be made for the required improvement. Use the same three seeds afterward.
+
+### Run Log: After
 
 | Criterion | Target | Seed 42 | Seed 7 | Seed 2024 | Verdict |
-|---|---|---|---|---|---|
-| 1.  |  |  |  |  |  |
-| 2.  |  |  |  |  |  |
-| 3.  |  |  |  |  |  |
-| 4.  |  |  |  |  |  |
-| 5.  |  |  |  |  |  |
+|---|---:|---:|---:|---:|---|
+| 1. Overall accuracy | >= 0.65 | PENDING | PENDING | PENDING | PENDING |
+| 2. Macro F1 | >= 0.60 | PENDING | PENDING | PENDING | PENDING |
+| 3. `supported_take` F1 | >= 0.50 | PENDING | PENDING | PENDING | PENDING |
+| 4. `unsupported_take` F1 | >= 0.50 | PENDING | PENDING | PENDING | PENDING |
+| 5. `discussion_prompt` F1 | >= 0.50 | PENDING | PENDING | PENDING | PENDING |
 
-**Did it help, and how do I know:**
-
-<!-- If it didn't, say so. Relabelling that didn't help is a genuinely
-     interesting result and earns full credit. -->
-
-
-
----
+**Did it help, and how do I know:** PENDING. Compare the before and after runs across the same three seeds. A change that makes performance worse is still a valid measured result if reported accurately.
 
 ## What's Still Broken
 
-<!-- For each criterion still missed: what you'd do, and why you stopped. -->
+PENDING AFTER THE IMPROVEMENT RUN.
 
+For every criterion still missed, state what you would try next and why you stopped.
 
-
-**The gap between what I meant my labels to capture and what the model
-learned:**
-<!-- Two sentences. Your confusion matrix is the evidence. -->
-
-
-
-<!-- ═════════════════════════════════════════════════════════════════════
-
-     SUBMISSION CHECKLIST — unit 5
-
-       [ ] criteria.md has five numbered criteria, each naming a NUMBER
-       [ ] Each has a reason underneath tied to your data or taxonomy
-       [ ] labels.csv: at least 150 rows, text/label/note, ONE file not split
-       [ ] No label above 70%
-       [ ] All five unit 5 sections have real content
-       [ ] Label Taxonomy includes the decision rule for your hardest boundary
-       [ ] The Dataset includes three hard cases
-       [ ] results.json and test_split.csv committed (the notebook does this)
-       [ ] At least four new commits
-       [ ] Repository URL submitted — WRITE IT DOWN
-
-     SUBMISSION CHECKLIST — unit 6
-
-       [ ] Baseline vs. Trained table, with your prediction written beforehand
-       [ ] Run Log — Before, five criteria across three seeds
-       [ ] Confusion matrix TYPED AS A MARKDOWN TABLE
-       [ ] A verdict on every criterion
-       [ ] A diagnosis for every miss, using the agreement report as evidence
-       [ ] Agreement Report with every disagreement adjudicated
-       [ ] One improvement, with Run Log — After
-       [ ] What's Still Broken
-       [ ] results_three_seeds_before.json, results_three_seeds_after.json,
-           baseline_results.json and
-           agreement_results.json committed
-       [ ] At least four new commits
-       [ ] The SAME repository URL as last unit
-
-     Do not delete and recreate this repository.
-     ═════════════════════════════════════════════════════════════════════ -->
-
----
-
-📖 **How to run this project: [RUNNING.md](RUNNING.md)**
+**The gap between what I meant my labels to capture and what the model learned:** PENDING. Use the confusion matrix as evidence.
