@@ -1,0 +1,184 @@
+{
+  "model": "facebook/bart-large-mnli",
+  "n": 30,
+  "seed": 42,
+  "held_out": true,
+  "used_definitions": true,
+  "scores": {
+    "n": 30,
+    "accuracy": 0.3,
+    "f1_macro": 0.22426470588235295,
+    "per_label": {
+      "discussion_prompt": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 11
+      },
+      "supported_take": {
+        "precision": 0.2916666666666667,
+        "recall": 0.875,
+        "f1": 0.43750000000000006,
+        "support": 8
+      },
+      "unsupported_take": {
+        "precision": 0.3333333333333333,
+        "recall": 0.18181818181818182,
+        "f1": 0.23529411764705885,
+        "support": 11
+      }
+    }
+  },
+  "predictions": [
+    {
+      "text": "How is Kareem top 3 ever, When he won 1 ring in the weakest era ever WITH HELP Someone just help me figure something out. 1979 and 1978 those lakers teams were loaded. Adrian Dantley kermit washington norm nixon jamaal wilkes. Kareem couldn't even get them to a WCF. Magic comes and makes that already stacked team that kareem was underachieving with, a superteam. to good to lose. Then they immediately win and kareem now has more than one ring. After spending majority of the 1970s post his ring choking (1973), choking again (1974 finals game 7), missing the playoffs while healthy with Gail Goodrich (1976 ), getting swept ( 1977) and as i mentioned not even making a WCF with those stacked lakers teams in 1979 and 1978? He didn't make good players great. He was lucky his org brought them to him. He wasn't a great leader. Big O was the voice on that MIL team. Magic was in showtime. I also find it funny that in 1980 LA beat the sonics to advance to the finals. The same sonics that kept sending kareem home in 1979 and 1978",
+      "gold": "supported_take",
+      "predicted": "supported_take"
+    },
+    {
+      "text": "What on earth is happening to our league? Everyone getting injured left and right smh. and we just got hali back.",
+      "gold": "discussion_prompt",
+      "predicted": "supported_take"
+    },
+    {
+      "text": "Question for LeBUM fanboy glizzy gluckers. Why does Leflopper get more praise for LOSING in the finals than MJ did for actually winning and never choking a single time. Lechoke has failed in the finals multiple times haha.",
+      "gold": "unsupported_take",
+      "predicted": "supported_take"
+    },
+    {
+      "text": "Why does kobe get slandered more for winning as robin than Lebron does for losing as alfred? The goal is to win right? Lebron went from batman to alfred in the 2011 finals. He was the 3rd best player on his own team. Yet kobe gets diminished MORE for WINNING as \" Robin \" ? I know lebron fans celebrate and undermine losing but this never made sense to me. How is winning as robin worse, Than losing as alfred? Then only winning the next 2 years once the other Batman Has to Hold your hand and show you how to be batman? Which Wade did for lebron \" *D. Wade called me (after Miami lost in the 2011 Finals) and we went to the Bahamas...I felt like, if I don't win this year, I'm going to get buried under every cemetery that they've got. So, we went to the Bahamas and had some great conversations there. D. Wade was like, \"In order for us to be great, you have to be the guy.\" I was looking at him like, \"What? What do you mean by that? I am the guy but what do you mean by 'the guy'?\" He was like, \"In order for us to be great, in order for us to accomplish what we want to accomplish while we are playing together, you have to be the guy that you were in Cleveland and I'll take a step back.\" Wade had to hold his hand and tell him what to do.*",
+      "gold": "supported_take",
+      "predicted": "supported_take"
+    },
+    {
+      "text": "With all the injuries happening who has the best opportunity to make a run? I would say Rockets and Celtics",
+      "gold": "unsupported_take",
+      "predicted": "supported_take"
+    },
+    {
+      "text": "Jayson TatHim is better than Luka \u2018despite the loss\u2019 Doncic!! Argue with a wall.",
+      "gold": "unsupported_take",
+      "predicted": "unsupported_take"
+    },
+    {
+      "text": "Jordan Pool Trade Request Jordan Poole has informed the New Orleans Pelicans that he would like to be traded! \u201cSources say Jordan Poole has told the Pelicans he would be open to opportunities elsewhere. His preference raises a broader question about how many of the team\u2019s veterans see their long-term future in New Orleans. Poole has also recorded more minutes than Jones in the last two contests.\u201d",
+      "gold": "unsupported_take",
+      "predicted": "supported_take"
+    },
+    {
+      "text": "Kyrie warned us about this 6 years ago with the vaccine, amount of injures coming\u2026.stay tuned",
+      "gold": "unsupported_take",
+      "predicted": "supported_take"
+    },
+    {
+      "text": "How do you guy feel about Luka defensively Had a conversation with a few of my friends and they said Luka is a good defender I heavily disagree what do you guys think",
+      "gold": "discussion_prompt",
+      "predicted": "unsupported_take"
+    },
+    {
+      "text": "Wait for the end\u2026",
+      "gold": "unsupported_take",
+      "predicted": "supported_take"
+    },
+    {
+      "text": "Is Tyrese Maxey the most fun watch in the nba? I was always a fan of Maxey but watching him nightly now is different.",
+      "gold": "discussion_prompt",
+      "predicted": "supported_take"
+    },
+    {
+      "text": "When did NBA start to have stylish hair? Nowadays when i watch an NBA game there are so many players with long ahh dreadlocks or braids, all sorts. Hair styles you'd see on a rapper or something. Is it social media effect? I don't remember maybe 10-15 years ago there were as many as today.",
+      "gold": "discussion_prompt",
+      "predicted": "unsupported_take"
+    },
+    {
+      "text": "Is Luka going to have to do everything for the Lakers? Craziest part is, Last Night he didn't even have the worse defense on the team and only 2 TO. The Lakers defense as a whole sucked last night.",
+      "gold": "discussion_prompt",
+      "predicted": "supported_take"
+    },
+    {
+      "text": "How is Muggsy Bogues getting his no. 1 jersey retired? Baron Davis also wore no. 1, was Muggsy a better player than Baron Davis?",
+      "gold": "discussion_prompt",
+      "predicted": "supported_take"
+    },
+    {
+      "text": "The Coach's Challenge is a genius way to redirect players' complaints towards their own bench instead of the refs By giving teams a formal mechanism to dispute a call, the NBA effectively shifted the burden of proof. Instead of players screaming at the officials for 48 minutes, a referee can simply say: \"If you're so sure, tell your coach to challenge it.\" Now when the whistle blows you have a frustrated Luka furiously twirling his fingers towards the bench, instead of yelling at the officials(Which he still constantly does).",
+      "gold": "unsupported_take",
+      "predicted": "unsupported_take"
+    },
+    {
+      "text": "Jaylen brown caught BRIBING felger and mazz Felger argued the Boston media is perpetrating a negative image of J\\*ylen Br\\*wn and that they were basically SLANDERING him, when all Drew and Scal did was use his OWN words against him and corroborate information, now that the secret is out that he isnt the great guy he always made himself out to be. They suggested an outlandish theory that Tatum and the Celtics are feeding THEM talking points. I think this is a deflection. In other words, J\\*ylen Br\\*wn paid off Felger to give him the support he desperately needed within the Boston media. Likewise he bribed Scal to RENEGE his comment about Jaylen demanding a trade (This 100% happened). This CANNOT happen. The celtics have a new vision for a new team and the media has to be in full conjunction with it. Otherwise Brad will become confused and have no idea waht to do come the deadline (ie. Bringing back J\\*ylen or NOT)... I vote.... NOT!!!!",
+      "gold": "supported_take",
+      "predicted": "unsupported_take"
+    },
+    {
+      "text": "Career Blunders. Not counting injuries, what were some players biggest mistakes? This could include turning down a massive contract, like Schroder, or Arenas bringing guns into the locker room. What actions like moving teams or some personal decisions just completely ruined careers?",
+      "gold": "discussion_prompt",
+      "predicted": "unsupported_take"
+    },
+    {
+      "text": "Scoot should be traded If you include Shaedon Sharp then Scoot isn\u2019t even a top 4 guard on this team. But he\u2019s young and I\u2019m sure they could get a Derrick Jones or a PJ Washington for him. And with that trade I think they\u2019d have the most well balanced roster in the league. Guards - Ja, Dame, Jrue and Sharpe Wings - Deni, Toumani, Krejci, Derrick Jones OR PJ Washington Bigs - Clingan, Rob Williams\u2026 and they still haven\u2019t bright out Yang Hansen How far would this team be capable of going with this trade?",
+      "gold": "supported_take",
+      "predicted": "supported_take"
+    },
+    {
+      "text": "Brunson is better than Luka Leadership and chemistry over stats. It's what separates players like Steph from KD. It's what separates players like Giannis from Harden. Your ability to lead a team, be vocal, be easy to work with, allow the team to function in sync, and stay level in big moments to secure victory is what makes you the better player. \"Oh he had better stats\" Stats don't have much meaning if you can't win.",
+      "gold": "supported_take",
+      "predicted": "supported_take"
+    },
+    {
+      "text": "Former players are dumb A lot of former players either don\u2019t watch games or they\u2019re flat out dumb. Jaylen brown has never been a top 10 defensive player let alone a DPOY candidate. A lot of players don\u2019t know shit and just hang their hat on \u201cI played the game\u201d I\u2019ve never really valued their opinion much",
+      "gold": "unsupported_take",
+      "predicted": "supported_take"
+    },
+    {
+      "text": "The Pistons\u2019 offense stalled after the first quarter against New York I\u2019m not changing my whole read on Detroit after one loss, but that middle stretch was rough: 12 points in the second, 13 in the third, and 9-for-37 from three. The Knicks scored 37 in the third and took control. Was this mostly a brutal shooting night, or did New York show a way to make Detroit\u2019s half-court offense uncomfortable?",
+      "gold": "supported_take",
+      "predicted": "supported_take"
+    },
+    {
+      "text": "Knicks 2025-2026 Deep Dive | HoopVisionLab",
+      "gold": "supported_take",
+      "predicted": "supported_take"
+    },
+    {
+      "text": "Who had the cooler childhood bedroom, Lebron (top) or Steph (bottom)?",
+      "gold": "discussion_prompt",
+      "predicted": "supported_take"
+    },
+    {
+      "text": "Who currently has a leg up in the Yaxel vs Luka rivalry? And who do you think is winning an MVP and/or ring first?",
+      "gold": "discussion_prompt",
+      "predicted": "supported_take"
+    },
+    {
+      "text": "Portland might be legit.",
+      "gold": "unsupported_take",
+      "predicted": "supported_take"
+    },
+    {
+      "text": "Giannis is OVERRATED Giannis has been overrated for his entire career. He is a great player but has massive weaknesses. These weaknesses make it almost impossible to build a real contender around him. He is a non-center who can\u2019t shoot. That means if your center can\u2019t shoot threes your spacing is screwed and the team is screwed. The only time Giannis won was when he had the perfect roster around him. He had a center that not only was a top rim protector but also a great 3 point shooter. How many centers are like that in the NBA? In addition to having a great 2 way shooting center you need a perimeter player who is WILLING and able to become the #1 option at the end of games. This is because Giannis poor free throw shooting he can\u2019t be the closer. But this scorer has to be willing to defer to Giannis for the entire game until the last 2 minutes. Not many elite scorers are willing to take up that role. Khris Middleton is one of the few. Then the other 2 starters also have to be good 3 point shooters. Even off the bench you need a center who can shoot (Portis) and more shooters. As you can see it is very hard to build around Giannis in order to cover his weaknesses. There is a reason why Giannis never won a single playoff series once Brook Lopez fell off. Even defensively Giannis is extremely overrated. He is one of the most overrated DPOTY ever. During his defensive peak he was surrounded by All NBA defenders and DPOTY candidates. Guys like Brook Lopez, Jrue Holiday, Bledsoe and PJ Tucker. Giannis isn\u2019t an elite rim protector. He frequently gets lost off ball. He isn\u2019t elite guarding the perimeter. With Lopez shutting down the paint and Jrue/Bledsoe cutting off the point of attack, all Giannis had to do was guard the other teams worst offensive player and free-lance. He literally was playing free safety and blowing things up. We all saw when Giannis was forced to defend at center or guard the perimeter. It was ugly. Yes he is a great defender but no where near his reputation. Put him on a team of average defenders and his defense doesn\u2019t make a difference. In 23/24 the Bucks were 19th in defense and Giannis was 29.",
+      "gold": "supported_take",
+      "predicted": "supported_take"
+    },
+    {
+      "text": "How bad is Lakers defense If blazer didnt miss that many FTs. They can easily score 150 points. Did laker give up defense completely?",
+      "gold": "discussion_prompt",
+      "predicted": "supported_take"
+    },
+    {
+      "text": "Everyone is getting hurt Hail hurt again. Any hurt. OKC falling apart. Tough week and half we\u2019ve had.",
+      "gold": "unsupported_take",
+      "predicted": "supported_take"
+    },
+    {
+      "text": "Would MJ last in today's era? With all the endorsements of gambling and punishments for them across the league I wonder if MJ could last. Doubt any player with a gambling addiction or who gets into gambling debts could last nowadays in today's league.",
+      "gold": "discussion_prompt",
+      "predicted": "supported_take"
+    },
+    {
+      "text": "Le-F-You 3s are the most disrespectful shots in NBA history.",
+      "gold": "unsupported_take",
+      "predicted": "supported_take"
+    }
+  ]
+}
