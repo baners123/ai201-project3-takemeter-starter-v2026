@@ -103,11 +103,34 @@ No label represents more than 70% of the dataset.
 - Learning rate: 2e-5
 - Batch size: 16
 - Maximum sequence length: 128 tokens
-- Initial seed: 42
+- Seed: 42
+- Test size: 30 posts
 
 **Anything I changed from the defaults, and why:** Nothing for the Unit 5 training run. I kept the starter settings so the first result would be a clean reference point.
 
-**Split sizes:** 140 training, 30 validation, 30 test, using the notebook's stratified 70/15/15 split.
+### Unit 5 results
+
+| Metric | Result |
+|---|---:|
+| Overall accuracy | 0.567 |
+| Macro F1 | 0.488 |
+| `supported_take` F1 | 0.588 |
+| `unsupported_take` F1 | 0.167 |
+| `discussion_prompt` F1 | 0.710 |
+
+The first run did not meet the overall accuracy target of 0.65 or the macro F1 target of 0.60. `supported_take` and `discussion_prompt` both cleared the 0.50 per-label F1 target. `unsupported_take` did not, with an F1 of 0.167.
+
+The confusion counts from the first run were:
+
+| true \ predicted | `supported_take` | `unsupported_take` | `discussion_prompt` |
+|---|---:|---:|---:|
+| **`supported_take`** | 5 | 0 | 3 |
+| **`unsupported_take`** | 4 | 1 | 6 |
+| **`discussion_prompt`** | 0 | 0 | 11 |
+
+The clearest issue is `unsupported_take`. Only 1 of 11 true `unsupported_take` posts was predicted correctly. Six were predicted as `discussion_prompt` and four were predicted as `supported_take`. This suggests the model has not learned the middle boundary well enough between an unsupported opinion, a question inviting discussion, and a supported argument.
+
+The confidence check from the same run also shows that confidence had some useful signal. Accuracy on the most confident third was 0.80, compared with 0.30 on the least confident third.
 
 ## How I Used AI
 
@@ -133,11 +156,11 @@ No label represents more than 70% of the dataset.
 
 | Measure | Baseline | Trained | Difference |
 |---|---:|---:|---:|
-| Overall accuracy | PENDING | PENDING | PENDING |
-| Macro F1 | PENDING | PENDING | PENDING |
-| F1, `supported_take` | PENDING | PENDING | PENDING |
-| F1, `unsupported_take` | PENDING | PENDING | PENDING |
-| F1, `discussion_prompt` | PENDING | PENDING | PENDING |
+| Overall accuracy | PENDING | 0.567 | PENDING |
+| Macro F1 | PENDING | 0.488 | PENDING |
+| F1, `supported_take` | PENDING | 0.588 | PENDING |
+| F1, `unsupported_take` | PENDING | 0.167 | PENDING |
+| F1, `discussion_prompt` | PENDING | 0.710 | PENDING |
 
 **What the gap actually means:** PENDING AFTER BASELINE RUN.
 
@@ -147,11 +170,11 @@ No label represents more than 70% of the dataset.
 
 | Criterion | Target | Seed 42 | Seed 7 | Seed 2024 | Verdict |
 |---|---:|---:|---:|---:|---|
-| 1. Overall accuracy | >= 0.65 | PENDING | PENDING | PENDING | PENDING |
-| 2. Macro F1 | >= 0.60 | PENDING | PENDING | PENDING | PENDING |
-| 3. `supported_take` F1 | >= 0.50 | PENDING | PENDING | PENDING | PENDING |
-| 4. `unsupported_take` F1 | >= 0.50 | PENDING | PENDING | PENDING | PENDING |
-| 5. `discussion_prompt` F1 | >= 0.50 | PENDING | PENDING | PENDING | PENDING |
+| 1. Overall accuracy | >= 0.65 | 0.567 | PENDING | PENDING | PENDING |
+| 2. Macro F1 | >= 0.60 | 0.488 | PENDING | PENDING | PENDING |
+| 3. `supported_take` F1 | >= 0.50 | 0.588 | PENDING | PENDING | PENDING |
+| 4. `unsupported_take` F1 | >= 0.50 | 0.167 | PENDING | PENDING | PENDING |
+| 5. `discussion_prompt` F1 | >= 0.50 | 0.710 | PENDING | PENDING | PENDING |
 
 ### Confusion matrix
 
@@ -159,11 +182,11 @@ Rows are true labels and columns are predictions.
 
 | true \ predicted | `supported_take` | `unsupported_take` | `discussion_prompt` |
 |---|---:|---:|---:|
-| **`supported_take`** | PENDING | PENDING | PENDING |
-| **`unsupported_take`** | PENDING | PENDING | PENDING |
-| **`discussion_prompt`** | PENDING | PENDING | PENDING |
+| **`supported_take`** | 5 | 0 | 3 |
+| **`unsupported_take`** | 4 | 1 | 6 |
+| **`discussion_prompt`** | 0 | 0 | 11 |
 
-**My biggest off-diagonal number, and what it means:** PENDING AFTER SECTION 7.
+**My biggest off-diagonal number, and what it means:** In the seed 42 run, 6 true `unsupported_take` posts were predicted as `discussion_prompt`. This is the largest confusion so far and suggests that the model often interprets unsupported opinions as posts whose main purpose is starting a discussion. This matrix will be updated after the full three-seed Unit 6 run.
 
 ## Verdicts and Diagnoses
 
@@ -208,11 +231,11 @@ Only one change should be made for the required improvement. Use the same three 
 
 | Criterion | Target | Seed 42 | Seed 7 | Seed 2024 | Verdict |
 |---|---:|---:|---:|---:|---|
-| 1. Overall accuracy | >= 0.65 | PENDING | PENDING | PENDING | PENDING |
-| 2. Macro F1 | >= 0.60 | PENDING | PENDING | PENDING | PENDING |
-| 3. `supported_take` F1 | >= 0.50 | PENDING | PENDING | PENDING | PENDING |
-| 4. `unsupported_take` F1 | >= 0.50 | PENDING | PENDING | PENDING | PENDING |
-| 5. `discussion_prompt` F1 | >= 0.50 | PENDING | PENDING | PENDING | PENDING |
+| 1. Overall accuracy | >= 0.65 | 0.567 | PENDING | PENDING | PENDING |
+| 2. Macro F1 | >= 0.60 | 0.488 | PENDING | PENDING | PENDING |
+| 3. `supported_take` F1 | >= 0.50 | 0.588 | PENDING | PENDING | PENDING |
+| 4. `unsupported_take` F1 | >= 0.50 | 0.167 | PENDING | PENDING | PENDING |
+| 5. `discussion_prompt` F1 | >= 0.50 | 0.710 | PENDING | PENDING | PENDING |
 
 **Did it help, and how do I know:** PENDING. Compare the before and after runs across the same three seeds. A change that makes performance worse is still a valid measured result if reported accurately.
 
