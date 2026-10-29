@@ -13,3 +13,11 @@ If it mainly states a ranking, prediction, judgment, or conclusion without devel
 A statistic, number, or player name by itself does not automatically make a post supported. The information must be used to support the main claim.
 
 If a post asks a question but also gives an argument, determine its main purpose. If most of the post develops the writer's own claim, use supported_take or unsupported_take. If its main purpose is getting answers from other users, use discussion_prompt.
+
+supported_take: Makes a basketball claim and supports it with a specific checkable fact, statistic, historical example, or explained basketball reasoning.
+
+unsupported_take: Makes a basketball judgment, ranking, prediction, or confident claim without enough supporting evidence or reasoning to establish an argument.
+
+discussion_prompt: Primarily asks the community to choose, rank, predict, compare, explain, or give an opinion rather than making its own developed argument.
+
+Decision rule: If a post gives specific evidence or explains a basketball mechanism that directly supports its main claim, label it supported_take. If it mainly states a ranking, prediction, judgment, or conclusion without developing why, label it unsupported_take. If its primary purpose is asking other users for their judgment, label it discussion_prompt.
